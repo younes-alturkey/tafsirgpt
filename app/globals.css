@@ -1,0 +1,294 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #faf6ec;
+  --bg-grad-1: rgba(174, 145, 85, 0.08);
+  --bg-grad-2: rgba(98, 116, 54, 0.05);
+  --surface: #ffffff;
+  --surface-2: #f3ecd9;
+  --surface-hover: #f6efdd;
+  --text: #1a1612;
+  --text-soft: #5b5347;
+  --text-faint: #8a8170;
+  --line: rgba(174, 145, 85, 0.28);
+  --line-strong: rgba(174, 145, 85, 0.5);
+  --gold: #ae9155;
+  --gold-strong: #8a7242;
+  --olive: #627436;
+  --shadow: 0 1px 2px rgba(26, 22, 18, 0.04), 0 12px 32px -16px rgba(174, 145, 85, 0.4);
+}
+
+.dark {
+  --bg: #100d0a;
+  --bg-grad-1: rgba(174, 145, 85, 0.1);
+  --bg-grad-2: rgba(98, 116, 54, 0.07);
+  --surface: #1a1612;
+  --surface-2: #221d17;
+  --surface-hover: #26201a;
+  --text: #f3ecd9;
+  --text-soft: #c4baa6;
+  --text-faint: #918876;
+  --line: rgba(174, 145, 85, 0.22);
+  --line-strong: rgba(174, 145, 85, 0.45);
+  --gold: #c9a96e;
+  --gold-strong: #d4b87a;
+  --olive: #7a8d4a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -20px rgba(0, 0, 0, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 88% 6%, var(--bg-grad-1) 0%, transparent 42%),
+    radial-gradient(circle at 8% 96%, var(--bg-grad-2) 0%, transparent 42%);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(174, 145, 85, 0.28);
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer components {
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .panel-surface {
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .surface-2 {
+    background: var(--surface-2);
+  }
+
+  .hairline {
+    border-color: var(--line);
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.01em;
+  }
+
+  .input,
+  .select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 0.7rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    outline: none;
+  }
+  .input:focus,
+  .select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(174, 145, 85, 0.18);
+  }
+  .input::placeholder {
+    /* --text-soft keeps placeholder hint text above the WCAG AA 4.5:1 ratio
+       on the --surface-2 input background in both themes. */
+    color: var(--text-soft);
+  }
+  .select {
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.7rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.62rem 1.15rem;
+    cursor: pointer;
+    transition: transform 0.12s, filter 0.15s, background 0.15s, border-color 0.15s;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-strong) 100%);
+    color: #fff;
+  }
+  .btn-primary:not(:disabled):hover {
+    filter: brightness(1.06);
+  }
+  .btn-ghost {
+    background: var(--surface-2);
+    border-color: var(--line);
+    color: var(--text);
+  }
+  .btn-ghost:not(:disabled):hover {
+    background: var(--surface-hover);
+    border-color: var(--line-strong);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.14s;
+    user-select: none;
+  }
+  .chip:hover {
+    border-color: var(--gold);
+    color: var(--text);
+  }
+  .chip-active {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-strong) 100%);
+    border-color: transparent;
+    color: #fff;
+  }
+  .chip-active:hover {
+    color: #fff;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border: 1px solid var(--line);
+    color: var(--text-soft);
+    background: var(--surface-2);
+  }
+
+  /* Quranic verse text */
+  .quran-text {
+    font-family: var(--font-amiri), "Amiri", serif;
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    line-height: 2.2;
+    color: var(--text);
+    word-spacing: 0.05em;
+  }
+
+  /* Scholarly verbatim source text — never summarized, shown in full */
+  .source-text {
+    font-family: var(--font-amiri), "Amiri", serif;
+    font-size: 1.12rem;
+    line-height: 2.15;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .stat-tile {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 0.85rem;
+    padding: 0.85rem 0.95rem;
+    text-align: center;
+  }
+}
+
+@layer utilities {
+  .text-soft {
+    color: var(--text-soft);
+  }
+  .text-faint {
+    color: var(--text-faint);
+  }
+  .text-gold {
+    color: var(--gold);
+  }
+  .text-olive {
+    color: var(--olive);
+  }
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-2);
+    border-radius: 0.6rem;
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(174, 145, 85, 0.12),
+      transparent
+    );
+    animation: shimmer 1.4s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
