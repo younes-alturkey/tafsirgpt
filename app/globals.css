@@ -55,7 +55,12 @@ body {
     radial-gradient(circle at 8% 96%, var(--bg-grad-2) 0%, transparent 42%);
   background-attachment: fixed;
   color: var(--text);
-  min-height: 100vh;
+  /* Track the *dynamic* viewport, not the large one. On iOS, `100vh` is the
+     toolbars-retracted height — taller than what's actually visible while the
+     browser chrome is showing. The chat shell is `h-[100dvh]`, so a `100vh`
+     body becomes taller than the shell and leaves dead space below the
+     composer. `100dvh` keeps body and shell in lockstep with the visible area. */
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
