@@ -149,7 +149,7 @@ function RobotIcon() {
 }
 
 export function ChatView() {
-  const { t, locale, newChatSignal } = useApp();
+  const { t, locale, newChatSignal, setChatLoading } = useApp();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -188,6 +188,13 @@ export function ChatView() {
   useEffect(() => {
     return () => abortRef.current?.abort();
   }, []);
+
+  // Mirror the streaming flag into shared context so the header can lock the
+  // explore/chat switch while a reply is in flight. Clear it on unmount.
+  useEffect(() => {
+    setChatLoading(streaming);
+  }, [streaming, setChatLoading]);
+  useEffect(() => () => setChatLoading(false), [setChatLoading]);
 
   // The header "+" button bumps `newChatSignal`: clear the conversation and focus
   // the composer. Signal 0 is the initial load, so we don't steal focus then.

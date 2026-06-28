@@ -107,7 +107,7 @@ function ExportIcon() {
 
 /** Segmented Explore / Chat switch. */
 function ModeSwitch() {
-  const { t, mode, setMode } = useApp();
+  const { t, mode, setMode, chatLoading } = useApp();
   return (
     <div className="seg" role="group" aria-label={t.modeSwitch}>
       <button
@@ -116,6 +116,7 @@ function ModeSwitch() {
         className={`seg-btn ${mode === "explore" ? "seg-btn-active" : ""}`}
         onClick={() => setMode("explore")}
         title={t.modeExplore}
+        disabled={chatLoading}
       >
         <GridIcon />
         <span className="hidden sm:inline">{t.modeExplore}</span>
@@ -126,6 +127,7 @@ function ModeSwitch() {
         className={`seg-btn ${mode === "chat" ? "seg-btn-active" : ""}`}
         onClick={() => setMode("chat")}
         title={t.modeChat}
+        disabled={chatLoading}
       >
         <ChatIcon />
         <span className="hidden sm:inline">{t.modeChat}</span>

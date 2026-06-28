@@ -33,6 +33,9 @@ type AppContextValue = {
   newChatSignal: number;
   /** Switch to chat mode and start a new conversation (clears + focuses input). */
   requestNewChat: () => void;
+  /** True while the chat is streaming a reply; locks the explore/chat switch. */
+  chatLoading: boolean;
+  setChatLoading: (v: boolean) => void;
   t: Dict;
   /** Localize digits for the active locale. */
   num: (v: string | number) => string;
@@ -67,6 +70,7 @@ export function Providers({
   // render already matches — no flash between chat and explore.
   const [mode, setModeState] = useState<Mode>(initialMode);
   const [newChatSignal, setNewChatSignal] = useState(0);
+  const [chatLoading, setChatLoading] = useState(false);
 
   // Hydrate the theme the pre-paint script applied to <html>. Locale comes from
   // the server (cookie) and the surface from the server (URL), so neither needs
@@ -141,6 +145,8 @@ export function Providers({
       setMode,
       newChatSignal,
       requestNewChat,
+      chatLoading,
+      setChatLoading,
       t,
       num,
     }),
@@ -155,6 +161,7 @@ export function Providers({
       setMode,
       newChatSignal,
       requestNewChat,
+      chatLoading,
       t,
       num,
     ],
