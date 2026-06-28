@@ -25,7 +25,20 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+// Absolute origin used as metadataBase, so OG/Twitter/canonical URLs are never
+// relative (and never "localhost" in prod). Priority:
+//   1. NEXT_PUBLIC_SITE_URL — set this to your custom domain when you have one.
+//   2. VERCEL_PROJECT_PRODUCTION_URL — Vercel's stable production domain, set on
+//      every deployment (incl. previews), so cards always point at prod.
+//   3. VERCEL_URL — the per-deployment URL, as a last resort.
+//   4. localhost — local dev only.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
 
 // Arabic is the default language; English is offered as an alternate. ALL
 // metadata text — title, description, and social/OG cards — is kept in pure
