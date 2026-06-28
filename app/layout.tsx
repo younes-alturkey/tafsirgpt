@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo, Amiri, JetBrains_Mono } from "next/font/google";
 import { cookies } from "next/headers";
+import { Analytics } from "@vercel/analytics/next";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import "./globals.css";
 
@@ -163,6 +164,7 @@ export default async function RootLayout({
         className={`${cairo.variable} ${amiri.variable} ${mono.variable} font-sans antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
