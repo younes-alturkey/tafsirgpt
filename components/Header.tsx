@@ -11,7 +11,7 @@ function LogoMark() {
     <svg
       viewBox="409 -4 138 138"
       aria-hidden="true"
-      className="h-6 w-6 sm:h-8 sm:w-8"
+      className="h-6 w-6 md:h-8 md:w-8"
       style={{ flexShrink: 0 }}
     >
       <image href="/logo.svg" width="546" height="131.6" />
@@ -119,7 +119,7 @@ function ModeSwitch() {
         disabled={chatLoading}
       >
         <GridIcon />
-        <span className="hidden sm:inline">{t.modeExplore}</span>
+        <span className="hidden md:inline">{t.modeExplore}</span>
       </button>
       <button
         type="button"
@@ -130,7 +130,7 @@ function ModeSwitch() {
         disabled={chatLoading}
       >
         <ChatIcon />
-        <span className="hidden sm:inline">{t.modeChat}</span>
+        <span className="hidden md:inline">{t.modeChat}</span>
       </button>
     </div>
   );
@@ -145,16 +145,16 @@ export function Header() {
       style={{ background: "color-mix(in srgb, var(--bg) 82%, transparent)" }}
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-        <div className="hidden items-center gap-2.5 sm:flex">
+        <div className="hidden items-center gap-2.5 md:flex">
           <LogoMark />
           <div className="leading-tight">
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-extrabold sm:text-lg">{t.appName}</h1>
+              <h1 className="text-sm font-extrabold md:text-lg">{t.appName}</h1>
               <a
                 href="https://mcp.tafsir.net/mcp"
                 target="_blank"
                 rel="noreferrer noopener"
-                className="badge hidden gap-1 px-1.5 py-px text-[0.55rem] hover:border-gold sm:inline-flex"
+                className="badge hidden gap-1 px-1.5 py-px text-[0.55rem] hover:border-gold md:inline-flex"
                 title={t.poweredBy}
               >
                 <span
@@ -169,7 +169,7 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex w-full items-center justify-between gap-1.5 sm:w-auto sm:justify-end">
+        <div className="flex w-full items-center justify-between gap-1.5 md:w-auto md:justify-end">
           <ModeSwitch />
           <div className="flex items-center gap-1.5">
             <button
