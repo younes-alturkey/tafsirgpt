@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useApp } from "../Providers";
 import { Field, RunButton, StateView, useAsync } from "../ui";
 import { callTool, asArray } from "@/lib/client";
+import { surahDisplayName } from "@/lib/surah-names";
 import type { SurahMeta } from "@/lib/types";
 
 type RootStats = {
@@ -54,6 +55,12 @@ export function RootPanel({
       return { stats, occ: asArray<Occurrence>(occ) };
     });
   }
+
+  // Show the default root (رحم) on first open.
+  useEffect(() => {
+    fetchRoot();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-5">
@@ -117,15 +124,19 @@ export function RootPanel({
                       className="flex items-center justify-between gap-3 py-2"
                     >
                       <button
-                        className="flex items-center gap-2 text-start hover:text-gold transition-colors"
+                        className="flex items-center gap-2 text-start hover:text-gold"
                         onClick={() => onGoToAyah(o.surah, o.ayah)}
                         title={t.goToAyah}
                       >
                         <span className="quran-text !text-xl">{o.word}</span>
                       </button>
-                      <span className="text-sm text-soft" dir="rtl">
-                        {surahName.get(o.surah) || o.surah} ·{" "}
-                        {locale === "ar" ? "آية" : "v."} {num(o.ayah)}
+                      <span
+                        className="text-sm text-soft"
+                        dir={locale === "ar" ? "rtl" : "ltr"}
+                      >
+                        {surahDisplayName(o.surah, surahName.get(o.surah) || "", locale) ||
+                          o.surah}{" "}
+                        · {locale === "ar" ? "آية" : "v."} {num(o.ayah)}
                       </span>
                     </li>
                   ))}

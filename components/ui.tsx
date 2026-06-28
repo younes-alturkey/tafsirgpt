@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useCallback, useId, useState } from "react";
+import React, { useCallback, useId, useMemo, useState } from "react";
 import { useApp } from "./Providers";
+import { localizeError } from "@/lib/i18n";
+import { Select } from "./Select";
+import { surahDisplayName, SURAH_NAMES_EN } from "@/lib/surah-names";
 import type { SurahMeta } from "@/lib/types";
 
 /* ------------------------------------------------------------------ async */
@@ -144,7 +147,7 @@ export function CopyButton({ text }: { text: string }) {
   return (
     <button
       type="button"
-      className="badge hover:border-gold transition-colors"
+      className="badge hover:border-gold"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(text);
@@ -183,7 +186,7 @@ export function StateView<T>({
   children: (data: T) => React.ReactNode;
   emptyHint?: string;
 }) {
-  const { t } = useApp();
+  const { t, locale } = useApp();
 
   if (state.status === "idle") {
     return (
@@ -205,7 +208,9 @@ export function StateView<T>({
     return (
       <div className="py-8 text-center" role="alert">
         <p className="font-semibold text-[var(--olive)]">{t.error}</p>
-        <p className="mt-1 text-sm text-soft break-words">{state.error}</p>
+        <p className="mt-1 text-sm text-soft break-words">
+          {localizeError(state.error, locale)}
+        </p>
         {onRetry ? (
           <button className="btn btn-ghost mt-4" onClick={() => onRetry()}>
             {t.retry}
@@ -228,21 +233,25 @@ export function SurahSelect({
   value: number;
   onChange: (n: number) => void;
 }) {
-  const { t, num } = useApp();
+  const { t, num, locale } = useApp();
+  const options = useMemo(
+    () =>
+      surahs.map((s) => ({
+        value: s.surah_no,
+        label: `${num(s.surah_no)}. ${surahDisplayName(s.surah_no, s.name, locale)}`,
+        // Searchable by number and by name in either language.
+        keywords: `${s.surah_no} ${s.name} ${SURAH_NAMES_EN[s.surah_no - 1] || ""}`,
+      })),
+    [surahs, num, locale],
+  );
   return (
-    <Field label={t.surah}>
-      <select
-        className="select"
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-      >
-        {surahs.map((s) => (
-          <option key={s.surah_no} value={s.surah_no}>
-            {num(s.surah_no)}. {s.name}
-          </option>
-        ))}
-      </select>
-    </Field>
+    <Select
+      label={t.surah}
+      ariaLabel={t.surah}
+      value={value}
+      onChange={(v) => onChange(Number(v))}
+      options={options}
+    />
   );
 }
 
@@ -259,20 +268,23 @@ export function AyahSelect({
 }) {
   const { t, num } = useApp();
   const safeCount = Math.max(1, count || 1);
+  const options = useMemo(
+    () =>
+      Array.from({ length: safeCount }, (_, i) => i + 1).map((n) => ({
+        value: n,
+        label: num(n),
+        keywords: String(n),
+      })),
+    [safeCount, num],
+  );
   return (
-    <Field label={label || t.ayah}>
-      <select
-        className="select"
-        value={Math.min(value, safeCount)}
-        onChange={(e) => onChange(Number(e.target.value))}
-      >
-        {Array.from({ length: safeCount }, (_, i) => i + 1).map((n) => (
-          <option key={n} value={n}>
-            {num(n)}
-          </option>
-        ))}
-      </select>
-    </Field>
+    <Select
+      label={label || t.ayah}
+      ariaLabel={label || t.ayah}
+      value={Math.min(value, safeCount)}
+      onChange={(v) => onChange(Number(v))}
+      options={options}
+    />
   );
 }
 
@@ -302,9 +314,13 @@ export function SourceText({ text }: { text: string }) {
 }
 
 /** Surah + ayah selection that keeps the ayah within the chosen surah's range. */
-export function useSurahAyah(surahs: SurahMeta[], initialSurah = 1) {
+export function useSurahAyah(
+  surahs: SurahMeta[],
+  initialSurah = 1,
+  initialAyah = 1,
+) {
   const [surah, setSurahRaw] = useState(initialSurah);
-  const [ayah, setAyah] = useState(1);
+  const [ayah, setAyah] = useState(initialAyah);
   const meta = surahs.find((s) => s.surah_no === surah);
   const ayahCount = meta?.ayah_count ?? 7;
 

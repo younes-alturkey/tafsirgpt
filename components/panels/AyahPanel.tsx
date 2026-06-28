@@ -75,6 +75,13 @@ export function AyahPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jump?.nonce]);
 
+  // Show the default ayah (al-Fatiha 1:1) on first open.
+  useEffect(() => {
+    if (jump) return; // a pending jump handles its own load
+    fetchAyah();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="space-y-5">
       <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">

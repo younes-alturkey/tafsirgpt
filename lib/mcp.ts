@@ -15,7 +15,7 @@
 
 const MCP_ENDPOINT = process.env.MCP_ENDPOINT || "https://mcp.tafsir.net/mcp";
 const PROTOCOL_VERSION = "2024-11-05";
-const CLIENT_INFO = { name: "tafsir-explorer", version: "1.0.0" };
+const CLIENT_INFO = { name: "tafsirgpt", version: "1.0.0" };
 
 export class McpError extends Error {
   code?: number;
@@ -207,6 +207,29 @@ export async function callTool(name: string, args: Record<string, unknown>): Pro
   const parsed = blocks.map((b) => parse(b.text));
   const value = parsed.length === 1 ? parsed[0] : parsed;
   return stripGuidanceFields(value);
+}
+
+export type McpToolDef = {
+  name: string;
+  description?: string;
+  /** JSON Schema for the tool's arguments — directly usable as an LLM function
+   *  spec (the `parameters` of an OpenAI/DeepSeek function definition). */
+  inputSchema?: Record<string, unknown>;
+};
+
+/** List the MCP server's tool definitions (name + description + input schema).
+ *  Used to expose the tools to the DeepSeek chat model as callable functions. */
+export async function listTools(): Promise<McpToolDef[]> {
+  const result = await mcpCall("tools/list", {});
+  const tools: any[] = Array.isArray(result?.tools) ? result.tools : [];
+  return tools.map((t) => ({
+    name: String(t?.name || ""),
+    description: typeof t?.description === "string" ? t.description : undefined,
+    inputSchema:
+      t?.inputSchema && typeof t.inputSchema === "object"
+        ? (t.inputSchema as Record<string, unknown>)
+        : undefined,
+  }));
 }
 
 /** Read an MCP resource (catalogs / schema). Returns parsed JSON when possible,

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../Providers";
 import {
   AyahSelect,
@@ -25,7 +25,9 @@ const NUZOOL_SOURCES = [
 
 export function NuzoolPanel({ surahs }: { surahs: SurahMeta[] }) {
   const { t, locale } = useApp();
-  const { surah, setSurah, ayah, setAyah, ayahCount } = useSurahAyah(surahs, 2);
+  // Default to al-Baqarah 2:144 (the change of qibla) — a well-attested
+  // occasion of revelation. Verse 2:1 (الم) has none, so it would open empty.
+  const { surah, setSurah, ayah, setAyah, ayahCount } = useSurahAyah(surahs, 2, 144);
   const [sources, setSources] = useState<string[]>(["nuzool"]);
   const { state, run } = useAsync<NuzoolResult>();
 
@@ -39,6 +41,12 @@ export function NuzoolPanel({ surahs }: { surahs: SurahMeta[] }) {
     const s = sources.length ? sources : ["nuzool"];
     run(() => callTool("fetch_nuzool_reason", { surah, ayah, sources: s }));
   }
+
+  // Show the default occasion of revelation on first open.
+  useEffect(() => {
+    fetchNuzool();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-5">

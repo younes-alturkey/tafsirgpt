@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../Providers";
 import {
   AyahSelect,
@@ -60,6 +60,12 @@ export function WordPanel({ surahs }: { surahs: SurahMeta[] }) {
       callTool("analyze_word", { surah, ayah, word_no: wordNo, aspects: asp }),
     );
   }
+
+  // Analyze the default word (al-Fatiha 1:1, word 1) on first open.
+  useEffect(() => {
+    fetchWord();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-5">

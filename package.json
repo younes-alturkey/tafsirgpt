@@ -1,8 +1,8 @@
 {
-  "name": "tafsir-explorer",
+  "name": "tafsirgpt",
   "version": "1.0.0",
   "private": true,
-  "description": "Single-page Quran & Tafsir explorer powered end-to-end by the Tafsir MCP server",
+  "description": "TafsirGPT — single-page Quran & Tafsir client powered end-to-end by the Tafsir MCP server",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,7 +12,9 @@
   "dependencies": {
     "next": "15.1.6",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "react-markdown": "^9.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "22.10.7",

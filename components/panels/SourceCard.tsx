@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { useApp } from "../Providers";
 import { CopyButton, Spinner } from "../ui";
+import { Pagination } from "../Pagination";
 import { callTool } from "@/lib/client";
-import { fmt } from "@/lib/i18n";
 
 export type Footnote = {
   index: number;
@@ -45,7 +45,7 @@ export function SourceCard({
   toolName: "fetch_tafsir" | "fetch_nuzool_reason";
   sourceName?: string;
 }) {
-  const { t, num, locale } = useApp();
+  const { num, locale } = useApp();
   const [entry, setEntry] = useState<SourceEntry>(initial);
   const [loading, setLoading] = useState(false);
 
@@ -118,29 +118,17 @@ export function SourceCard({
         </details>
       ) : null}
 
-      {totalParts > 1 ? (
-        <nav className="mt-4 flex items-center justify-between gap-2 border-t hairline pt-3">
-          <button
-            className="btn btn-ghost text-sm"
-            onClick={() => goToPart(part - 1)}
-            disabled={loading || part <= 1}
-          >
-            ‹ {t.prevPart}
-          </button>
-          <span className="text-sm text-soft">
-            {fmt(t.partOf, { a: num(part), b: num(totalParts) })}
-          </span>
-          <button
-            className="btn btn-ghost text-sm"
-            onClick={() => goToPart(part + 1)}
-            disabled={loading || part >= totalParts}
-          >
-            {t.nextPart} ›
-          </button>
-        </nav>
-      ) : null}
+      <Pagination
+        page={part}
+        total={totalParts}
+        onChange={goToPart}
+        disabled={loading}
+        unit="part"
+        label={sourceName || entry.attribution}
+        className="mt-4 border-t hairline pt-3"
+      />
 
-      {!(sourceName || false) ? (
+      {!sourceName ? (
         <p className="mt-3 text-xs text-faint">{entry.attribution}</p>
       ) : null}
     </article>

@@ -79,6 +79,12 @@ export function SourcesPanel({
     cov.run(() => callTool("list_sources_for_ayah", { surah, ayah }));
   }
 
+  // Show coverage for the default ayah (al-Fatiha 1:1) on first open.
+  useEffect(() => {
+    checkCoverage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ---- schema resource ----
   const schema = useAsync<string>();
   const [showSchema, setShowSchema] = useState(false);
@@ -204,7 +210,7 @@ export function SourcesPanel({
       {/* Schema resource */}
       <section>
         <button className="btn btn-ghost" onClick={loadSchema}>
-          {showSchema ? t.showLess : "DB Schema · quran://schema"}
+          {showSchema ? t.showLess : `${t.dbSchema} · quran://schema`}
         </button>
         {showSchema ? (
           <div className="mt-3 card p-4">

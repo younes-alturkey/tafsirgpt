@@ -1,35 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../Providers";
 import { Field, RunButton, StateView, useAsync } from "../ui";
+import { Pagination } from "../Pagination";
 import { callTool } from "@/lib/client";
+
+const TOTAL_PAGES = 604; // pages in the standard Madani mushaf
 
 type FawaedResult = { page: number; fawaed_count: number; items: string[] };
 
 export function FawaedPanel() {
   const { t, num } = useApp();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); // committed page — drives the fetch and pager
+  const [draft, setDraft] = useState("1"); // raw text in the jump-to input
   const { state, run } = useAsync<FawaedResult>();
 
-  function fetchFawaed() {
-    const p = Math.min(604, Math.max(1, page));
-    run(() => callTool("get_page_fawaed", { page: p }));
+  function loadPage(p: number) {
+    const clamped = Math.min(TOTAL_PAGES, Math.max(1, p));
+    setPage(clamped);
+    setDraft(String(clamped));
+    run(() => callTool("get_page_fawaed", { page: clamped }));
   }
+
+  function fetchFawaed() {
+    loadPage(Number(draft) || page);
+  }
+
+  // Show the default page (1) on first open.
+  useEffect(() => {
+    fetchFawaed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-5">
       <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
-        <Field label={t.page} hint="1–604">
+        <Field label={t.page} hint={`1–${TOTAL_PAGES}`}>
           <input
             type="number"
             min={1}
-            max={604}
+            max={TOTAL_PAGES}
             className="input"
-            value={page}
-            onChange={(e) =>
-              setPage(Math.min(604, Math.max(1, Number(e.target.value) || 1)))
-            }
+            value={draft}
+            onChange={(e) => setDraft(e.target.value.replace(/[^0-9]/g, ""))}
             onKeyDown={(e) => e.key === "Enter" && fetchFawaed()}
             placeholder={t.pagePlaceholder}
           />
@@ -39,6 +53,9 @@ export function FawaedPanel() {
         </RunButton>
       </div>
 
+      {/* StateView swaps the body for a skeleton/error, so the pager lives
+          outside it (driven by `page`) to stay put and usable across loads
+          and failures. */}
       <StateView state={state} onRetry={fetchFawaed}>
         {(d) =>
           d.items?.length ? (
@@ -66,6 +83,15 @@ export function FawaedPanel() {
           )
         }
       </StateView>
+
+      <Pagination
+        page={page}
+        total={TOTAL_PAGES}
+        onChange={loadPage}
+        disabled={state.status === "loading"}
+        unit="page"
+        className="border-t hairline pt-4"
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../Providers";
 import {
   Field,
@@ -11,6 +11,7 @@ import {
   useAsync,
 } from "../ui";
 import { callTool } from "@/lib/client";
+import { surahDisplayName } from "@/lib/surah-names";
 import type { SurahMeta } from "@/lib/types";
 
 type SurahInfo = {
@@ -48,6 +49,12 @@ export function SurahPanel({ surahs }: { surahs: SurahMeta[] }) {
     });
   }
 
+  // Show the default surah (al-Fatiha) on first open.
+  useEffect(() => {
+    fetchSurah();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Short scalar stats -> compact uniform tiles.
   const scalarFields: { key: string; label: string }[] = [
     { key: "word_count", label: t.wordCountStat },
@@ -83,9 +90,20 @@ export function SurahPanel({ surahs }: { surahs: SurahMeta[] }) {
         {({ info, stats }) => (
           <div className="space-y-5">
             <div className="card p-5 sm:p-7 text-center">
-              <h3 className="quran-text !text-4xl" dir="rtl">
-                {info.names?.[0]}
-              </h3>
+              {locale === "en" ? (
+                <>
+                  <h3 className="text-3xl font-extrabold text-gold">
+                    {surahDisplayName(info.surah_no, info.names?.[0] || "", "en")}
+                  </h3>
+                  <p className="quran-text !text-2xl mt-1" dir="rtl">
+                    {info.names?.[0]}
+                  </p>
+                </>
+              ) : (
+                <h3 className="quran-text !text-4xl" dir="rtl">
+                  {info.names?.[0]}
+                </h3>
+              )}
               <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
                 <span className="badge">
                   {info.revelation_type === "مكية"

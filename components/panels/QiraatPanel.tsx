@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../Providers";
 import {
   AyahSelect,
@@ -29,7 +29,9 @@ type QResult = {
 
 export function QiraatPanel({ surahs }: { surahs: SurahMeta[] }) {
   const { t, num, locale } = useApp();
-  const { surah, setSurah, ayah, setAyah, ayahCount } = useSurahAyah(surahs);
+  // Default to al-Fatiha 1:4 (مَالِك/مَلِك) — the canonical variant reading.
+  // The basmala (1:1) has no variants, so it would open empty.
+  const { surah, setSurah, ayah, setAyah, ayahCount } = useSurahAyah(surahs, 1, 4);
   const [wordNo, setWordNo] = useState<string>("");
   const { state, run } = useAsync<QResult>();
 
@@ -39,6 +41,12 @@ export function QiraatPanel({ surahs }: { surahs: SurahMeta[] }) {
     if (wordNo.trim() && w > 0) args.word_no = w;
     run(() => callTool("get_qeraat_variants", args));
   }
+
+  // Show the default variant readings on first open.
+  useEffect(() => {
+    fetchQiraat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-5">

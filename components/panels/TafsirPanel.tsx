@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useApp } from "../Providers";
 import {
   AyahSelect,
@@ -32,7 +32,7 @@ export function TafsirPanel({
 }) {
   const { t, num, locale } = useApp();
   const { surah, setSurah, ayah, setAyah, ayahCount } = useSurahAyah(surahs);
-  const [selected, setSelected] = useState<string[]>(["saadi"]);
+  const [selected, setSelected] = useState<string[]>(["tabary"]);
   const { state, run } = useAsync<TafsirResult>();
 
   const nameById = useMemo(() => {
@@ -57,9 +57,15 @@ export function TafsirPanel({
   }
 
   function fetchTafsir() {
-    const sources = selected.length ? selected : ["saadi"];
+    const sources = selected.length ? selected : ["tabary"];
     run(() => callTool("fetch_tafsir", { surah, ayah, sources }));
   }
+
+  // Show the default tafsir (al-Fatiha 1:1, al-Tabari) on first open.
+  useEffect(() => {
+    fetchTafsir();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const coverageLabel: Record<string, string> = {
     full: t.coverageFull,
@@ -81,7 +87,7 @@ export function TafsirPanel({
         label={`${t.tafsirSources} (${num(selected.length)})`}
         hint={locale === "ar" ? "اختر مصدراً أو أكثر" : "pick one or more"}
       >
-        <div className="flex flex-wrap gap-2 max-h-44 overflow-y-auto p-1">
+        <div className="flex flex-wrap gap-2 max-h-72 overflow-y-auto p-1">
           {sorted.map((s) => {
             const active = selected.includes(s.id);
             return (

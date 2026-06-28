@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../Providers";
 import { Field, RunButton, StateView, useAsync } from "../ui";
+import { Select } from "../Select";
 import { callTool, asArray } from "@/lib/client";
+import { surahDisplayName } from "@/lib/surah-names";
 import type { SurahMeta, TafsirSource } from "@/lib/types";
 
 type QuranHit = { surah: number; ayah: number; text: string; snippet?: string };
@@ -57,14 +59,15 @@ export function SearchPanel({
 }) {
   const { t, num, locale } = useApp();
   const [mode, setMode] = useState<"quran" | "tafsir">("quran");
-  const [query, setQuery] = useState("");
-  const [source, setSource] = useState("saadi");
+  const [query, setQuery] = useState("الرحمن");
+  const [source, setSource] = useState("tabary");
   const [limit, setLimit] = useState(20);
   const quran = useAsync<QuranHit[]>();
   const tafsir = useAsync<TafsirHit[]>();
 
   const surahName = (n: number) =>
-    surahs.find((s) => s.surah_no === n)?.name || String(n);
+    surahDisplayName(n, surahs.find((s) => s.surah_no === n)?.name || "", locale) ||
+    String(n);
 
   function runSearch() {
     const q = query.trim();
@@ -85,6 +88,12 @@ export function SearchPanel({
       });
     }
   }
+
+  // Run the default query (الرحمن) on first open.
+  useEffect(() => {
+    runSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fullSources = tafsirs.filter((s) => s.coverage === "full");
 
@@ -134,19 +143,17 @@ export function SearchPanel({
       </div>
 
       {mode === "tafsir" ? (
-        <Field label={t.searchTafsirSource}>
-          <select
-            className="select"
-            value={source}
-            onChange={(e) => setSource(e.target.value)}
-          >
-            {fullSources.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name_ar}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select
+          label={t.searchTafsirSource}
+          ariaLabel={t.searchTafsirSource}
+          value={source}
+          onChange={(v) => setSource(String(v))}
+          options={fullSources.map((s) => ({
+            value: s.id,
+            label: s.name_ar,
+            keywords: s.id,
+          }))}
+        />
       ) : null}
 
       {mode === "quran" ? (

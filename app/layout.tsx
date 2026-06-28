@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo, Amiri, JetBrains_Mono } from "next/font/google";
-import { Providers } from "@/components/Providers";
+import { cookies } from "next/headers";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -26,25 +27,27 @@ const mono = JetBrains_Mono({
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-// Arabic is the default language; English is offered as an alternate.
-const TITLE = "مُستكشِف التفسير · Tafsir Explorer";
+// Arabic is the default language; English is offered as an alternate. The page
+// title and social/OG metadata are kept in pure Arabic — the app's name and a
+// short tagline — with no Latin transliteration.
+const TITLE = "تفسير جي بي تي";
 
 // Plain-language description: this app is simply a client (a window) for the
-// Tafsir MCP server — it shows you the Qur'an and its commentary.
+// Tafsir MCP server — it shows you the Quran and its commentary.
 const DESCRIPTION_AR =
-  "مُستكشِف التفسير تطبيقٌ مجاني من صفحة واحدة، وهو واجهةٌ (عميل) لخادم Tafsir MCP. اقرأ أي آية مع تفسيرها من ٢٨ مصدراً موثوقاً، وأسباب نزولها، وإعرابها، ومعاني غريبها، وقراءاتها، مع بحثٍ في القرآن وفي التفاسير. كل المحتوى يأتي مباشرةً من خادم مركز تفسير للدراسات القرآنية. بالعربية والإنجليزية، بالوضعين الليلي والنهاري.";
+  "تفسير جي بي تي تطبيقٌ مجاني من صفحة واحدة، وهو واجهةٌ (عميل) لخادم Tafsir MCP. اقرأ أي آية مع تفسيرها من ٢٨ مصدراً موثوقاً، وأسباب نزولها، وإعرابها، ومعاني غريبها، وقراءاتها، مع بحثٍ في القرآن وفي التفاسير. كل المحتوى يأتي مباشرةً من خادم مركز تفسير للدراسات القرآنية. بالعربية والإنجليزية، بالوضعين الليلي والنهاري.";
 const DESCRIPTION_EN =
-  "Tafsir Explorer is a free, single-page client for the Tafsir MCP server. Read any verse with its commentary from 28 trusted sources, the reasons it was revealed, its grammar, rare-word meanings and recitations, plus search across the Qur'an and the tafsirs. Every word comes straight from the Tafsir Center's server. Arabic and English, light and dark.";
+  "TafsirGPT is a free, single-page client for the Tafsir MCP server. Read any verse with its commentary from 28 trusted sources, the reasons it was revealed, its grammar, rare-word meanings and recitations, plus search across the Quran and the tafsirs. Every word comes straight from the Tafsir Center's server. Arabic and English, light and dark.";
 
-// Shorter, value-first text for social cards (Open Graph / Twitter).
+// Shorter, value-first text for social cards (Open Graph / Twitter) — pure Arabic.
 const SOCIAL_DESCRIPTION =
-  "نافذة واحدة على القرآن الكريم وتفاسيره — محتوى علمي موثّق يأتي مباشرةً من خادم Tafsir MCP. عربي وإنجليزي، ليلي ونهاري. · One window into the Qur'an and its tafsir — verified scholarly content served live from the Tafsir MCP server. Free, bilingual, on any device.";
+  "نافذة واحدة على القرآن الكريم وتفاسيره — اقرأ أي آية مع تفسيرها من مصادر موثوقة، وأسباب نزولها، وإعرابها، ومعاني غريبها، وقراءاتها، مع البحث في القرآن والتفاسير.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: TITLE,
-    template: "%s · مُستكشِف التفسير",
+    template: "%s · تفسير جي بي تي",
   },
   description: `${DESCRIPTION_AR} — ${DESCRIPTION_EN}`,
   keywords: [
@@ -57,18 +60,18 @@ export const metadata: Metadata = {
     "القراءات",
     "مركز تفسير للدراسات القرآنية",
     "Quran",
-    "Qur'an",
+    "Holy Quran",
     "Tafsir",
     "Tafsir MCP",
     "Quran tafsir",
     "Quranic studies",
     "MCP client",
   ],
-  authors: [{ name: "مركز تفسير للدراسات القرآنية — Tafsir Center for Qur'anic Studies", url: "https://tafsir.net" }],
-  creator: "Tafsir Center for Qur'anic Studies",
-  publisher: "Tafsir Center for Qur'anic Studies",
+  authors: [{ name: "مركز تفسير للدراسات القرآنية — Tafsir Center for Quranic Studies", url: "https://tafsir.net" }],
+  creator: "Tafsir Center for Quranic Studies",
+  publisher: "Tafsir Center for Quranic Studies",
   category: "education",
-  applicationName: "مُستكشِف التفسير · Tafsir Explorer",
+  applicationName: TITLE,
   alternates: {
     canonical: "/",
     languages: {
@@ -98,7 +101,7 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false, email: false, address: false },
   appleWebApp: {
     capable: true,
-    title: "مُستكشِف التفسير",
+    title: "تفسير جي بي تي",
     statusBarStyle: "black-translucent",
   },
 };
@@ -114,31 +117,38 @@ export const viewport: Viewport = {
   ],
 };
 
-// Runs before paint: restores saved theme/locale (or honours OS dark mode) so
-// there is no flash of the wrong theme or text direction.
+// Runs before paint: restores the saved theme (or honours OS dark mode) so there
+// is no flash of the wrong theme. Locale is handled server-side via the `locale`
+// cookie (see below), so it is rendered correctly on the first paint already.
 const PREPAINT = `(function(){try{
   var t=localStorage.getItem('theme');
   if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
-  var l=localStorage.getItem('locale')||'ar';
-  var r=document.documentElement;
-  r.lang=l; r.dir=(l==='ar')?'rtl':'ltr';
-  if(t==='dark'){r.classList.add('dark');}
+  if(t==='dark'){document.documentElement.classList.add('dark');}
 }catch(e){}})();`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Read the saved locale from the cookie so the server renders the right
+  // language and direction up front — no hydration flash of Arabic for English
+  // readers. The cookie is written client-side by Providers' setLocale. The page
+  // re-reads it to seed Providers (which now lives at the page level so it can
+  // also read the surface from the URL's search params).
+  const saved = (await cookies()).get("locale")?.value;
+  const locale: Locale = saved === "en" || saved === "ar" ? saved : DEFAULT_LOCALE;
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREPAINT }} />
       </head>
       <body
         className={`${cairo.variable} ${amiri.variable} ${mono.variable} font-sans antialiased`}
       >
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );

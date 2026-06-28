@@ -8,13 +8,15 @@ export type Dict = typeof dictionaries.ar;
 export const dictionaries = {
   ar: {
     dir: "rtl",
-    appName: "مُستكشِف التفسير",
+    appName: "تفسير جي بي تي",
     appTagline: "وصول علمي موثّق إلى القرآن الكريم والتفسير",
     poweredBy: "مدعوم بالكامل عبر خادم Tafsir MCP",
+    poweredByShort: "Tafsir MCP",
     poweredByLink: "مركز تفسير للدراسات القرآنية",
     language: "English",
     themeLight: "الوضع النهاري",
     themeDark: "الوضع الليلي",
+    scrollToTop: "العودة إلى الأعلى",
     // generic
     surah: "السورة",
     ayah: "الآية",
@@ -27,10 +29,13 @@ export const dictionaries = {
     fetch: "اعرض",
     search: "ابحث",
     analyze: "حلِّل",
-    loading: "جارٍ التحميل من الخادم…",
+    loading: "جارٍ التحميل من الخادم",
     empty: "اختر القيم ثم اضغط الزر لعرض البيانات.",
     noResults: "لا توجد نتائج.",
     error: "تعذّر جلب البيانات",
+    errorNetwork: "تعذّر الاتصال بالخادم. تأكد من اتصالك بالإنترنت ثم أعد المحاولة.",
+    errorServer: "حدث خطأ مؤقت في الخادم. يُرجى إعادة المحاولة بعد قليل.",
+    errorGeneric: "حدث خطأ غير متوقع. يُرجى إعادة المحاولة.",
     retry: "إعادة المحاولة",
     attribution: "المصدر",
     selectSurah: "اختر السورة",
@@ -93,6 +98,13 @@ export const dictionaries = {
     partOf: "الجزء {a} من {b}",
     prevPart: "الجزء السابق",
     nextPart: "الجزء التالي",
+    firstPart: "الجزء الأول",
+    lastPart: "الجزء الأخير",
+    pageOf: "الصفحة {a} من {b}",
+    prevPage: "الصفحة السابقة",
+    nextPage: "الصفحة التالية",
+    firstPage: "الصفحة الأولى",
+    lastPage: "الصفحة الأخيرة",
     // surah
     revelationType: "نوع النزول",
     revelationOrder: "ترتيب النزول",
@@ -138,8 +150,8 @@ export const dictionaries = {
     searchInTafsir: "في نصوص التفسير",
     searchMode: "نطاق البحث",
     searchTafsirSource: "مصدر التفسير",
-    searchPlaceholderQuran: "اكتب كلمة أو عبارة (يدعم البحث بدون تشكيل)…",
-    searchPlaceholderTafsir: "اكتب كلمة أو عبارة للبحث داخل التفسير…",
+    searchPlaceholderQuran: "اكتب كلمة أو عبارة (يدعم البحث بدون تشكيل)",
+    searchPlaceholderTafsir: "اكتب كلمة أو عبارة للبحث داخل التفسير",
     goToAyah: "اذهب إلى الآية",
     // fawaed
     pagePlaceholder: "رقم الصفحة (1–604)",
@@ -164,17 +176,74 @@ export const dictionaries = {
     contentType: "نوع المحتوى",
     makki: "مكية",
     madani: "مدنية",
+    dbSchema: "مخطط قاعدة البيانات",
+    // mode switch
+    modeExplore: "استكشاف",
+    modeChat: "محادثة",
+    modeSwitch: "الوضع",
+    // chat assistant
+    chat: {
+      title: "تفسير جي بي تي",
+      subtitle:
+        "اسأل عن أي آية أو تفسير أو علمٍ من علوم القرآن — وكل الإجابات تأتي مباشرةً من خادم Tafsir MCP.",
+      placeholder: "راسِل تفسير جي بي تي",
+      send: "إرسال",
+      stop: "إيقاف",
+      expand: "تكبير المحرر",
+      editorTitle: "محرر السؤال",
+      newChat: "محادثة جديدة",
+      examplesTitle: "جرِّب أحد هذه الأسئلة",
+      examples: [
+        "ما الفرق بين اسمَي الله ﴿الرَّحْمَٰن﴾ و﴿الرَّحِيم﴾، ولماذا قُدِّم أحدُهما على الآخر؟",
+        "ما سبب نزول آية الكرسي (البقرة ٢٥٥)، وما الفضائل الواردة في شأنها؟",
+        "ما إعراب ﴿إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ﴾، وما دلالة تقديم المفعول على الفعل؟",
+        "ما القراءات المتواترة في ﴿مَالِكِ يَوْمِ الدِّينِ﴾، وكيف يختلف المعنى بينها؟",
+        "عرِّفني بسورة الكهف: أسماؤها، نوع نزولها، أهمُّ مقاصدها، وما ورد في فضلها.",
+        "كم مرة ورد جذر «رحم» في القرآن الكريم، وفي أيِّ السور تكرَّر أكثر؟",
+      ],
+      disclaimer:
+        "المحتوى مصدره خادم Tafsir MCP. قد تُخطئ صياغة النموذج، فراجع النص الأصلي عند الحاجة.",
+      you: "أنت",
+      assistant: "تفسير جي بي تي",
+      thinking: "يفكّر…",
+      working: "يستعلم من خادم التفسير…",
+      errorTitle: "تعذّر إكمال الرد",
+      stopped: "أُوقِف الرد.",
+      contextLimit:
+        "تجاوزت المحادثة الحدَّ الأقصى لسياق النموذج (مليون رمز). اختصر سؤالك أو ابدأ محادثة جديدة لتتمكّن من الإرسال.",
+      tool: {
+        fetch_ayah: "جلب الآية",
+        fetch_tafsir: "جلب التفسير",
+        list_tafsir_sources: "مصادر التفسير",
+        list_science_sources: "مصادر علوم القرآن",
+        list_all_sources: "كل المصادر",
+        list_sources_for_ayah: "مصادر الآية",
+        fetch_nuzool_reason: "سبب النزول",
+        fetch_surah_info: "معلومات السورة",
+        get_surah_statistics: "إحصاءات السورة",
+        analyze_word: "تحليل الكلمة",
+        find_root_occurrences: "مواضع الجذر",
+        get_root_stats: "إحصاءات الجذر",
+        get_qeraat_variants: "القراءات",
+        search_quran_text: "بحث في القرآن",
+        search_in_tafsir: "بحث في التفسير",
+        get_quran_overview: "إحصاءات القرآن",
+        get_page_fawaed: "فوائد الصفحة",
+      } as Record<string, string>,
+    },
   },
 
   en: {
     dir: "ltr",
-    appName: "Tafsir Explorer",
-    appTagline: "Verified scholarly access to the Qur'an and its exegesis",
+    appName: "TafsirGPT",
+    appTagline: "Verified scholarly access to the Quran and its commentary",
     poweredBy: "Powered end-to-end by the Tafsir MCP server",
+    poweredByShort: "Tafsir MCP",
     poweredByLink: "Tafsir Center for Quranic Studies",
     language: "العربية",
     themeLight: "Light",
     themeDark: "Dark",
+    scrollToTop: "Back to top",
     surah: "Surah",
     ayah: "Ayah",
     word: "Word",
@@ -186,10 +255,13 @@ export const dictionaries = {
     fetch: "Show",
     search: "Search",
     analyze: "Analyze",
-    loading: "Loading from the server…",
+    loading: "Loading from the server",
     empty: "Pick values, then press the button to load data.",
     noResults: "No results.",
     error: "Could not load data",
+    errorNetwork: "Couldn't reach the server. Check your internet connection and try again.",
+    errorServer: "The server had a temporary problem. Please try again shortly.",
+    errorGeneric: "Something went wrong. Please try again.",
     retry: "Retry",
     attribution: "Source",
     selectSurah: "Select surah",
@@ -216,30 +288,30 @@ export const dictionaries = {
       surah: "Surah card",
       word: "Word analysis",
       root: "Linguistic roots",
-      qiraat: "Qira'at",
+      qiraat: "Readings",
       nuzool: "Reasons of revelation",
       search: "Search",
       fawaed: "Page benefits",
       sources: "Sources & stats",
     },
     sectionDesc: {
-      ayah: "The verse in Uthmani script with optional tajwid, i'rab, gharib, qira'at and tadabbur layers.",
-      tafsir: "Exegesis of a verse from twenty-eight verified sources, paginated for long texts.",
+      ayah: "The verse in Uthmani script with optional recitation, grammar, rare-word, readings and reflection layers.",
+      tafsir: "Commentary on a verse from twenty-eight verified sources, paginated for long texts.",
       surah: "A full surah profile: names, revelation, virtues, goals and statistics.",
-      word: "Analyze a Quranic word: meaning, i'rab, morphology, statistics and readings.",
-      root: "Statistics for a linguistic root and every place it occurs in the Qur'an.",
+      word: "Analyze a Quranic word: meaning, grammar, morphology, statistics and readings.",
+      root: "Statistics for a linguistic root and every place it occurs in the Quran.",
       qiraat: "The canonical variant readings of the words of a verse.",
-      nuzool: "The occasion of a verse's revelation where established with its chain.",
-      search: "Full-text search across Quranic verses or inside tafsir texts.",
-      fawaed: "Benefits from al-Mukhtasar for each page of the mushaf.",
-      sources: "Catalogue of content sources and overall statistics of the Qur'an.",
+      nuzool: "The occasion of a verse's revelation where established, with its chain.",
+      search: "Full-text search across Quran verses or inside the commentary texts.",
+      fawaed: "Benefits from al-Mukhtasar for each page of the Quran.",
+      sources: "Catalogue of content sources and overall statistics of the Quran.",
     },
     includes: {
-      tajweed: "Tajwid",
-      irab: "I'rab",
-      gharib: "Gharib",
-      qiraat_ayah: "Qira'at",
-      tadabbur: "Tadabbur",
+      tajweed: "Recitation",
+      irab: "Grammar",
+      gharib: "Rare words",
+      qiraat_ayah: "Readings",
+      tadabbur: "Reflection",
     },
     includesLabel: "Science layers",
     textUthmani: "Uthmani script",
@@ -249,6 +321,13 @@ export const dictionaries = {
     partOf: "Part {a} of {b}",
     prevPart: "Previous part",
     nextPart: "Next part",
+    firstPart: "First part",
+    lastPart: "Last part",
+    pageOf: "Page {a} of {b}",
+    prevPage: "Previous page",
+    nextPage: "Next page",
+    firstPage: "First page",
+    lastPage: "Last page",
     revelationType: "Revelation",
     revelationOrder: "Revelation order",
     ayahCount: "Ayahs",
@@ -267,7 +346,7 @@ export const dictionaries = {
     surahClass: "Class",
     aspects: {
       meaning: "Meaning",
-      irab: "I'rab",
+      irab: "Grammar",
       sarf: "Morphology",
       statistics: "Statistics",
       qeraat: "Readings",
@@ -289,18 +368,18 @@ export const dictionaries = {
     searchInTafsir: "In tafsir texts",
     searchMode: "Search scope",
     searchTafsirSource: "Tafsir source",
-    searchPlaceholderQuran: "Type a word or phrase (diacritic-insensitive)…",
-    searchPlaceholderTafsir: "Type a word or phrase to search inside the tafsir…",
+    searchPlaceholderQuran: "Type a word or phrase (diacritic-insensitive)",
+    searchPlaceholderTafsir: "Type a word or phrase to search inside the tafsir",
     goToAyah: "Go to ayah",
     pagePlaceholder: "Page number (1–604)",
     fawaedCount: "Benefits",
-    overviewTitle: "Qur'an statistics",
+    overviewTitle: "Quran statistics",
     totalSurahs: "Surahs",
     totalAyahs: "Ayahs",
     totalWords: "Words",
     totalRoots: "Unique roots",
-    makkiSurahs: "Makki surahs",
-    madaniSurahs: "Madani surahs",
+    makkiSurahs: "Meccan surahs",
+    madaniSurahs: "Medinan surahs",
     mushafPages: "Mushaf pages",
     nuzoolAyahs: "Ayahs with revelation cause",
     allSources: "All sources",
@@ -311,8 +390,63 @@ export const dictionaries = {
     covered: "covered",
     coveredCount: "sources cover this ayah",
     contentType: "Content type",
-    makki: "Makki",
-    madani: "Madani",
+    makki: "Meccan",
+    madani: "Medinan",
+    dbSchema: "Database schema",
+    // mode switch
+    modeExplore: "Explore",
+    modeChat: "Chat",
+    modeSwitch: "Mode",
+    // chat assistant
+    chat: {
+      title: "TafsirGPT",
+      subtitle:
+        "Ask about any verse, its commentary, or a Quranic science — every answer comes straight from the Tafsir MCP server.",
+      placeholder: "Message TafsirGPT",
+      send: "Send",
+      stop: "Stop",
+      expand: "Expand editor",
+      editorTitle: "Prompt editor",
+      newChat: "New chat",
+      examplesTitle: "Try one of these",
+      examples: [
+        "What is the difference between Allah's names «الرَّحْمَٰن» and «الرَّحِيم», and why is one mentioned first?",
+        "What is the reason for the revelation of Ayat al-Kursi (2:255), and what virtues are reported about it?",
+        "What is the iʿrāb of «إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ», and why does the object precede the verb?",
+        "What are the canonical readings of «مَالِكِ يَوْمِ الدِّينِ», and how does the meaning differ between them?",
+        "Give me a full profile of Surah Al-Kahf: its names, revelation type, main aims, and virtues.",
+        "How many times does the root «رحم» occur in the Quran, and in which surahs does it appear most?",
+      ],
+      disclaimer:
+        "Content is served from the Tafsir MCP server. The model's wording may err — check the original text when needed.",
+      you: "You",
+      assistant: "TafsirGPT",
+      thinking: "Thinking…",
+      working: "Querying the Tafsir server…",
+      errorTitle: "Couldn't complete the reply",
+      stopped: "Reply stopped.",
+      contextLimit:
+        "This conversation exceeds the model's 1M-token context limit. Shorten your message or start a new chat to send.",
+      tool: {
+        fetch_ayah: "Fetch ayah",
+        fetch_tafsir: "Fetch tafsir",
+        list_tafsir_sources: "Tafsir sources",
+        list_science_sources: "Science sources",
+        list_all_sources: "All sources",
+        list_sources_for_ayah: "Sources for ayah",
+        fetch_nuzool_reason: "Reason of revelation",
+        fetch_surah_info: "Surah info",
+        get_surah_statistics: "Surah statistics",
+        analyze_word: "Word analysis",
+        find_root_occurrences: "Root occurrences",
+        get_root_stats: "Root statistics",
+        get_qeraat_variants: "Variant readings",
+        search_quran_text: "Search Quran",
+        search_in_tafsir: "Search tafsir",
+        get_quran_overview: "Quran overview",
+        get_page_fawaed: "Page benefits",
+      } as Record<string, string>,
+    },
   },
 };
 
@@ -330,4 +464,32 @@ export function localizeDigits(value: string | number, locale: Locale): string {
 
 export function fmt(template: string, vars: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
+}
+
+/**
+ * Turn a raw thrown error message into a localized, user-facing string.
+ *
+ * Raw messages come from three places: the browser's `fetch` (e.g.
+ * "Failed to fetch" / "Load failed"), our API proxy / MCP transport
+ * ("HTTP 502", "Session not found", "… after retries"), and the MCP tools
+ * themselves — which already return meaningful Arabic prose. We localize the
+ * first two classes and pass the Arabic tool messages through unchanged.
+ */
+const NETWORK_ERROR_RE =
+  /failed to fetch|load failed|network\s*error|networkerror|fetch failed|err_(internet|network|connection)|connection (refused|reset|closed|timed out)|net::|e(conn|timed|notfound)/i;
+const SERVER_ERROR_RE =
+  /http\s*\d{3}|bad gateway|internal server|service unavailable|gateway timeout|session (not found|id)|no session id|unparseable|after retries|mcp (request|error)|disallowed|invalid json/i;
+
+export function localizeError(
+  raw: string | null | undefined,
+  locale: Locale,
+): string {
+  const d = dictionaries[locale];
+  const msg = (raw || "").trim();
+  if (!msg) return d.errorGeneric;
+  if (NETWORK_ERROR_RE.test(msg)) return d.errorNetwork;
+  if (SERVER_ERROR_RE.test(msg)) return d.errorServer;
+  // A message that contains Arabic is real content from a tool — keep it.
+  if (/[؀-ۿ]/.test(msg)) return msg;
+  return d.errorGeneric;
 }
