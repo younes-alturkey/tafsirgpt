@@ -143,7 +143,7 @@ export function Header() {
       style={{ background: "color-mix(in srgb, var(--bg) 82%, transparent)" }}
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-        <div className="flex items-center gap-2.5">
+        <div className="hidden items-center gap-2.5 sm:flex">
           <LogoMark />
           <div className="leading-tight">
             <div className="flex items-center gap-2">
@@ -167,44 +167,46 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex w-full items-center justify-between gap-1.5 sm:w-auto sm:justify-end">
           <ModeSwitch />
-          <button
-            type="button"
-            className="btn btn-ghost px-2.5 py-1.5"
-            onClick={exportToPdf}
-            aria-label={t.exportPdf}
-            title={t.exportPdf}
-          >
-            <ExportIcon />
-          </button>
-          <button
-            type="button"
-            className="btn btn-ghost px-2.5 py-1.5"
-            onClick={requestNewChat}
-            aria-label={t.chat.newChat}
-            title={t.chat.newChat}
-          >
-            <PlusIcon />
-          </button>
-          <button
-            type="button"
-            className="btn btn-ghost px-2.5 py-1.5 text-sm"
-            onClick={toggleLocale}
-            aria-label="Switch language"
-            title={t.language}
-          >
-            <span className="font-bold">{locale === "ar" ? "EN" : "ع"}</span>
-          </button>
-          <button
-            type="button"
-            className="btn btn-ghost px-2.5 py-1.5"
-            onClick={toggleTheme}
-            aria-label={theme === "dark" ? t.themeLight : t.themeDark}
-            title={theme === "dark" ? t.themeLight : t.themeDark}
-          >
-            {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              className="btn btn-ghost px-2.5 py-1.5"
+              onClick={exportToPdf}
+              aria-label={t.exportPdf}
+              title={t.exportPdf}
+            >
+              <ExportIcon />
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost px-2.5 py-1.5"
+              onClick={requestNewChat}
+              aria-label={t.chat.newChat}
+              title={t.chat.newChat}
+            >
+              <PlusIcon />
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost px-2.5 py-1.5 text-sm"
+              onClick={toggleLocale}
+              aria-label="Switch language"
+              title={t.language}
+            >
+              <span className="font-bold">{locale === "ar" ? "EN" : "ع"}</span>
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost px-2.5 py-1.5"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? t.themeLight : t.themeDark}
+              title={theme === "dark" ? t.themeLight : t.themeDark}
+            >
+              {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+            </button>
+          </div>
         </div>
       </div>
     </header>
