@@ -87,11 +87,13 @@ export const metadata: Metadata = {
     url: "/",
     locale: "ar_SA",
     alternateLocale: ["en_US"],
+    images: [{ url: "/opengraph-image.jpeg", width: 1200, height: 630, alt: TITLE }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: SOCIAL_DESCRIPTION,
+    images: ["/opengraph-image.jpeg"],
   },
   robots: {
     index: true,
