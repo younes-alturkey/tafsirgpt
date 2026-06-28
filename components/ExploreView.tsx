@@ -26,7 +26,7 @@ import { TABS, type TabId } from "@/lib/explore-tabs";
  * in, so the first render is already on the right tab (no flash, and no
  * hydration mismatch when the server renders Explore directly).
  */
-export function ExploreView({ initialTab = "ayah" }: { initialTab?: TabId }) {
+export function ExploreView({ initialTab = "nuzool" }: { initialTab?: TabId }) {
   const { t, locale } = useApp();
   const [boot, setBoot] = useState<Bootstrap | null>(null);
   const [bootError, setBootError] = useState<string | null>(null);
@@ -75,7 +75,7 @@ export function ExploreView({ initialTab = "ayah" }: { initialTab?: TabId }) {
   return (
     <main className="mx-auto max-w-5xl px-4 pb-24 pt-5">
       {/* Tab nav */}
-      <nav className="-mx-4 mb-6 overflow-x-auto px-4" aria-label="sections">
+      <nav className="no-print -mx-4 mb-6 overflow-x-auto px-4" aria-label="sections">
         <div className="flex w-max gap-2 pb-1">
           {TABS.map((id) => {
             const active = tab === id;

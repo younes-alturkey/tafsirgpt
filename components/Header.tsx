@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useApp } from "./Providers";
+import { exportToPdf } from "@/lib/print";
 
 // The brand globe mark, cropped from the official Tafsir Center logo via an
 // outer viewBox so we show the genuine symbol rather than a placeholder.
@@ -10,7 +11,7 @@ function LogoMark() {
     <svg
       viewBox="409 -4 138 138"
       aria-hidden="true"
-      className="h-7 w-7 sm:h-8 sm:w-8"
+      className="h-6 w-6 sm:h-8 sm:w-8"
       style={{ flexShrink: 0 }}
     >
       <image href="/logo.svg" width="546" height="131.6" />
@@ -82,6 +83,28 @@ function PlusIcon() {
   );
 }
 
+/** Tray-with-down-arrow — the conventional "export / save to file" glyph. */
+function ExportIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 3v11m0 0l-4-4m4 4l4-4"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 16v2.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V16"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** Segmented Explore / Chat switch. */
 function ModeSwitch() {
   const { t, mode, setMode } = useApp();
@@ -116,7 +139,7 @@ export function Header() {
     useApp();
 
   return (
-    <header className="sticky top-0 z-30 border-b hairline backdrop-blur-md"
+    <header className="no-print sticky top-0 z-30 border-b hairline backdrop-blur-md"
       style={{ background: "color-mix(in srgb, var(--bg) 82%, transparent)" }}
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
@@ -124,7 +147,7 @@ export function Header() {
           <LogoMark />
           <div className="leading-tight">
             <div className="flex items-center gap-2">
-              <h1 className="text-base font-extrabold sm:text-lg">{t.appName}</h1>
+              <h1 className="text-sm font-extrabold sm:text-lg">{t.appName}</h1>
               <a
                 href="https://mcp.tafsir.net/mcp"
                 target="_blank"
@@ -144,11 +167,20 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <ModeSwitch />
           <button
             type="button"
-            className="btn btn-ghost px-3 py-2"
+            className="btn btn-ghost px-2.5 py-1.5"
+            onClick={exportToPdf}
+            aria-label={t.exportPdf}
+            title={t.exportPdf}
+          >
+            <ExportIcon />
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost px-2.5 py-1.5"
             onClick={requestNewChat}
             aria-label={t.chat.newChat}
             title={t.chat.newChat}
@@ -157,7 +189,7 @@ export function Header() {
           </button>
           <button
             type="button"
-            className="btn btn-ghost px-3 py-2 text-sm"
+            className="btn btn-ghost px-2.5 py-1.5 text-sm"
             onClick={toggleLocale}
             aria-label="Switch language"
             title={t.language}
@@ -166,7 +198,7 @@ export function Header() {
           </button>
           <button
             type="button"
-            className="btn btn-ghost px-3 py-2"
+            className="btn btn-ghost px-2.5 py-1.5"
             onClick={toggleTheme}
             aria-label={theme === "dark" ? t.themeLight : t.themeDark}
             title={theme === "dark" ? t.themeLight : t.themeDark}

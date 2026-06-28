@@ -73,7 +73,7 @@ export function Pagination({
   // control mid-navigation would throw keyboard focus back to <body>. The
   // go() guard plus the clamp make these buttons safe no-ops instead.
   return (
-    <nav className={`pg ${className}`} aria-label={label ? `${label} — ${detail}` : detail}>
+    <nav className={`pg no-print ${className}`} aria-label={label ? `${label} — ${detail}` : detail}>
       <span className="pg-detail" aria-live="polite">
         {detail}
       </span>

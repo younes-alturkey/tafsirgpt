@@ -17,6 +17,7 @@ export const dictionaries = {
     themeLight: "الوضع النهاري",
     themeDark: "الوضع الليلي",
     scrollToTop: "العودة إلى الأعلى",
+    exportPdf: "تصدير PDF",
     // generic
     surah: "السورة",
     ayah: "الآية",
@@ -186,7 +187,7 @@ export const dictionaries = {
       title: "تفسير جي بي تي",
       subtitle:
         "اسأل عن أي آية أو تفسير أو علمٍ من علوم القرآن — وكل الإجابات تأتي مباشرةً من خادم Tafsir MCP.",
-      placeholder: "راسِل تفسير جي بي تي",
+      placeholder: "اسأل تفسير جي بي تي",
       send: "إرسال",
       stop: "إيقاف",
       expand: "تكبير المحرر",
@@ -198,7 +199,7 @@ export const dictionaries = {
         "ما سبب نزول آية الكرسي (البقرة ٢٥٥)، وما الفضائل الواردة في شأنها؟",
         "ما إعراب ﴿إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ﴾، وما دلالة تقديم المفعول على الفعل؟",
         "ما القراءات المتواترة في ﴿مَالِكِ يَوْمِ الدِّينِ﴾، وكيف يختلف المعنى بينها؟",
-        "عرِّفني بسورة الكهف: أسماؤها، نوع نزولها، أهمُّ مقاصدها، وما ورد في فضلها.",
+        "عرِّفني بسورة الكهف باختصار في سطرين: نوع نزولها، ومقصدها، وفضلها.",
         "كم مرة ورد جذر «رحم» في القرآن الكريم، وفي أيِّ السور تكرَّر أكثر؟",
       ],
       disclaimer:
@@ -244,6 +245,7 @@ export const dictionaries = {
     themeLight: "Light",
     themeDark: "Dark",
     scrollToTop: "Back to top",
+    exportPdf: "Export PDF",
     surah: "Surah",
     ayah: "Ayah",
     word: "Word",
@@ -414,7 +416,7 @@ export const dictionaries = {
         "What is the reason for the revelation of Ayat al-Kursi (2:255), and what virtues are reported about it?",
         "What is the iʿrāb of «إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ», and why does the object precede the verb?",
         "What are the canonical readings of «مَالِكِ يَوْمِ الدِّينِ», and how does the meaning differ between them?",
-        "Give me a full profile of Surah Al-Kahf: its names, revelation type, main aims, and virtues.",
+        "In two lines: Surah Al-Kahf's revelation type, main aim, and virtue.",
         "How many times does the root «رحم» occur in the Quran, and in which surahs does it appear most?",
       ],
       disclaimer:

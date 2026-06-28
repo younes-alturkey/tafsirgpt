@@ -243,7 +243,7 @@ export function Select({
   const dir = locale === "ar" ? "rtl" : "ltr";
 
   return (
-    <div className={className}>
+    <div className={`no-print ${className}`}>
       {label ? (
         <label htmlFor={id} className="field-label">
           {label}

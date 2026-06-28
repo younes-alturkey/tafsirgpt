@@ -161,7 +161,7 @@ export function renderOgImage() {
       </Line>
 
       <Line size={25} color="#a99b80" marginTop={10} reversed>
-        محتوًى موثّق مباشرةً من خادم Tafsir MCP
+        محتوًى موثّق مباشرةً من خادم مركز تفسير للدراسات القرآنية
       </Line>
 
       <div

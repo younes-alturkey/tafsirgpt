@@ -103,7 +103,7 @@ export function Field({
   );
 
   return (
-    <div className={className}>
+    <div className={`no-print ${className}`}>
       {controlId ? (
         <label className="field-label" htmlFor={controlId}>
           {caption}
@@ -132,7 +132,7 @@ export function RunButton({
   return (
     <button
       type="button"
-      className={`btn btn-primary ${className}`}
+      className={`btn btn-primary no-print ${className}`}
       onClick={() => onClick()}
       disabled={disabled || loading}
     >
@@ -147,7 +147,7 @@ export function CopyButton({ text }: { text: string }) {
   return (
     <button
       type="button"
-      className="badge hover:border-gold"
+      className="badge no-print hover:border-gold"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(text);
@@ -300,7 +300,7 @@ export function Toggle({
   return (
     <button
       type="button"
-      className={`chip ${active ? "chip-active" : ""}`}
+      className={`chip no-print ${active ? "chip-active" : ""}`}
       onClick={onClick}
       aria-pressed={active}
     >

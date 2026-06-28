@@ -45,6 +45,10 @@ const CHARS_PER_TOKEN = 3;
 
 const estimateTokens = (text: string) => Math.ceil(text.length / CHARS_PER_TOKEN);
 
+// Tallest the composer grows before it starts scrolling instead. Keep in sync
+// with the `max-height` on `.composer-input` in globals.css.
+const MAX_COMPOSER_HEIGHT = 200;
+
 /** A compact hint of the most meaningful tool argument, e.g. "112:1" or a root. */
 function toolArgHint(args: Record<string, unknown>): string {
   if (!args) return "";
@@ -120,6 +124,27 @@ function ThinkingDots() {
       <span />
       <span />
     </span>
+  );
+}
+
+/** Friendly robot mark for the assistant avatar. Draws in white (currentColor). */
+function RobotIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M12 3.5V6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      <circle cx="12" cy="2.6" r="1.1" fill="currentColor" />
+      <rect x="4" y="6" width="16" height="13" rx="3.5" stroke="currentColor" strokeWidth="1.7" />
+      <circle cx="9" cy="12.4" r="1.35" fill="currentColor" />
+      <circle cx="15" cy="12.4" r="1.35" fill="currentColor" />
+      <path d="M9.5 16h5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M4 11H2.4M21.6 11H20" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
   );
 }
 
@@ -300,10 +325,16 @@ export function ChatView() {
   };
 
   // Grow the composer to fit its content, capped so it never eats the page.
+  // Show the scrollbar only once we're pinned at the cap: while the textarea
+  // is still growing it fits its content exactly, so sub-pixel rounding of the
+  // auto-grown height would otherwise flicker the scrollbar on and off.
   const autoSize = useCallback((el: HTMLTextAreaElement | null) => {
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
+    const full = el.scrollHeight;
+    const capped = full > MAX_COMPOSER_HEIGHT;
+    el.style.height = `${capped ? MAX_COMPOSER_HEIGHT : full}px`;
+    el.style.overflowY = capped ? "auto" : "hidden";
   }, []);
 
   const onInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -370,7 +401,7 @@ export function ChatView() {
                   <div key={m.id} className="msg msg-assistant">
                     <div className="msg-head">
                       <span className="msg-avatar" aria-hidden="true">
-                        ت
+                        <RobotIcon />
                       </span>
                       <span className="msg-name">{t.chat.assistant}</span>
                     </div>
@@ -430,6 +461,7 @@ export function ChatView() {
               placeholder={t.chat.placeholder}
               rows={1}
               aria-label={t.chat.placeholder}
+              disabled={streaming}
             />
             <button
               type="button"
@@ -437,6 +469,7 @@ export function ChatView() {
               onClick={() => setEditorOpen(true)}
               aria-label={t.chat.expand}
               title={t.chat.expand}
+              disabled={streaming}
             >
               <ExpandIcon />
             </button>

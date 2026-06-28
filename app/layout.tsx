@@ -27,17 +27,16 @@ const mono = JetBrains_Mono({
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-// Arabic is the default language; English is offered as an alternate. The page
-// title and social/OG metadata are kept in pure Arabic — the app's name and a
-// short tagline — with no Latin transliteration.
+// Arabic is the default language; English is offered as an alternate. ALL
+// metadata text — title, description, and social/OG cards — is kept in pure
+// Arabic with no Latin words or transliteration mixed in.
 const TITLE = "تفسير جي بي تي";
 
 // Plain-language description: this app is simply a client (a window) for the
-// Tafsir MCP server — it shows you the Quran and its commentary.
+// Tafsir Center's server — it shows you the Quran and its commentary. Pure
+// Arabic; no English is appended.
 const DESCRIPTION_AR =
-  "تفسير جي بي تي تطبيقٌ مجاني من صفحة واحدة، وهو واجهةٌ (عميل) لخادم Tafsir MCP. اقرأ أي آية مع تفسيرها من ٢٨ مصدراً موثوقاً، وأسباب نزولها، وإعرابها، ومعاني غريبها، وقراءاتها، مع بحثٍ في القرآن وفي التفاسير. كل المحتوى يأتي مباشرةً من خادم مركز تفسير للدراسات القرآنية. بالعربية والإنجليزية، بالوضعين الليلي والنهاري.";
-const DESCRIPTION_EN =
-  "TafsirGPT is a free, single-page client for the Tafsir MCP server. Read any verse with its commentary from 28 trusted sources, the reasons it was revealed, its grammar, rare-word meanings and recitations, plus search across the Quran and the tafsirs. Every word comes straight from the Tafsir Center's server. Arabic and English, light and dark.";
+  "تفسير جي بي تي تطبيقٌ مجاني من صفحة واحدة، وهو واجهةٌ (عميل) لخادم مركز تفسير للدراسات القرآنية. اقرأ أي آية مع تفسيرها من ٢٨ مصدراً موثوقاً، وأسباب نزولها، وإعرابها، ومعاني غريبها، وقراءاتها، مع بحثٍ في القرآن وفي التفاسير. كل المحتوى يأتي مباشرةً من الخادم نفسه. بالعربية والإنجليزية، بالوضعين الليلي والنهاري.";
 
 // Shorter, value-first text for social cards (Open Graph / Twitter) — pure Arabic.
 const SOCIAL_DESCRIPTION =
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
     default: TITLE,
     template: "%s · تفسير جي بي تي",
   },
-  description: `${DESCRIPTION_AR} — ${DESCRIPTION_EN}`,
+  description: DESCRIPTION_AR,
   keywords: [
     "تفسير",
     "القرآن الكريم",

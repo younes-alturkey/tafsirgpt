@@ -24,6 +24,12 @@ export type SourceEntry = {
   total_parts?: number;
   has_more?: boolean;
   next_part?: number;
+  /** Sources with no entry for a verse return `available: false` plus a `reason`
+   *  explaining the gap (e.g. no established occasion of revelation), and no
+   *  `text` at all — rendered as a muted note rather than a blank card. */
+  available?: boolean;
+  reason?: string;
+  coverage_kind?: string;
 };
 
 const FN_TYPE_LABEL: Record<string, { ar: string; en: string }> = {
@@ -52,7 +58,16 @@ export function SourceCard({
   const totalParts = entry.total_parts ?? 1;
   const part = entry.part ?? 1;
   const body = entry.text_display || entry.text || "";
+  const hasBody = body.trim().length > 0;
   const footnotes = entry.footnotes || [];
+
+  // A source with no entry for this verse (`available: false`, no text) carries a
+  // `reason` explaining the gap. Surface it instead of an empty card.
+  const note =
+    entry.reason ||
+    (locale === "ar"
+      ? "لا يوجد محتوى لهذه الآية في هذا المصدر."
+      : "No content for this verse in this source.");
 
   async function goToPart(targetPart: number) {
     if (loading || targetPart < 1 || targetPart > totalParts) return;
@@ -81,7 +96,7 @@ export function SourceCard({
         <h4 className="font-bold text-gold">
           {sourceName || entry.attribution}
         </h4>
-        <CopyButton text={body} />
+        {hasBody ? <CopyButton text={body} /> : null}
       </header>
 
       <div className="relative">
@@ -90,12 +105,18 @@ export function SourceCard({
             <Spinner className="text-gold" />
           </div>
         ) : null}
-        <div className="source-text" dir="rtl">
-          {body}
-        </div>
+        {hasBody ? (
+          <div className="source-text" dir="rtl">
+            {body}
+          </div>
+        ) : (
+          <p className="py-2 text-sm italic text-faint" dir="rtl">
+            {note}
+          </p>
+        )}
       </div>
 
-      {footnotes.length > 0 ? (
+      {hasBody && footnotes.length > 0 ? (
         <details className="mt-4 surface-2 rounded-xl border hairline p-3">
           <summary className="cursor-pointer text-sm font-semibold text-soft">
             {locale === "ar" ? "الهوامش" : "Footnotes"} ({num(footnotes.length)})
@@ -118,15 +139,17 @@ export function SourceCard({
         </details>
       ) : null}
 
-      <Pagination
-        page={part}
-        total={totalParts}
-        onChange={goToPart}
-        disabled={loading}
-        unit="part"
-        label={sourceName || entry.attribution}
-        className="mt-4 border-t hairline pt-3"
-      />
+      {hasBody ? (
+        <Pagination
+          page={part}
+          total={totalParts}
+          onChange={goToPart}
+          disabled={loading}
+          unit="part"
+          label={sourceName || entry.attribution}
+          className="mt-4 border-t hairline pt-3"
+        />
+      ) : null}
 
       {!sourceName ? (
         <p className="mt-3 text-xs text-faint">{entry.attribution}</p>

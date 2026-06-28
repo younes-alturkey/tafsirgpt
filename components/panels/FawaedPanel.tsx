@@ -43,7 +43,19 @@ export function FawaedPanel() {
             max={TOTAL_PAGES}
             className="input"
             value={draft}
-            onChange={(e) => setDraft(e.target.value.replace(/[^0-9]/g, ""))}
+            onChange={(e) => {
+              const digits = e.target.value.replace(/[^0-9]/g, "");
+              // Enforce the stated max as you type — the native `max` attr only
+              // marks the field invalid, it never stops you typing past it.
+              setDraft(
+                digits === "" ? "" : String(Math.min(TOTAL_PAGES, Number(digits))),
+              );
+            }}
+            onBlur={() =>
+              setDraft(
+                String(Math.min(TOTAL_PAGES, Math.max(1, Number(draft) || page))),
+              )
+            }
             onKeyDown={(e) => e.key === "Enter" && fetchFawaed()}
             placeholder={t.pagePlaceholder}
           />
